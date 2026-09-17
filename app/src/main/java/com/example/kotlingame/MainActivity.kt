@@ -6,14 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,52 +49,79 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun GamesStates(name: String, modifier: Modifier = Modifier) {
-    Column(
+    // Usamos Box como container principal para fixar elementos no topo, centro e rodapé
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(Color.Black)
+            .padding(16.dp)
     ) {
-        Text(
-            text = "LIVES: 1 2 3 4",
-            fontSize = 15.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF3DDC84),
-            fontFamily = FontFamily.Serif,
-            letterSpacing = 5.sp,
-            modifier = Modifier.offset(x = 240.dp, y = 24.dp)
-        )
-        Text(
-            text = "SCORE: 0050",
-            fontSize = 15.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF3DDC84),
-            fontFamily = FontFamily.Serif,
-            textAlign = TextAlign.Start,
-            letterSpacing = 5.sp
-        )
-        Text(
-            text = "Start",
-            fontSize = 15.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = (Color.White),
-            fontFamily = FontFamily.Serif,
-            modifier = modifier
-                .padding(bottom = 32.dp)       // 2. Afasta da borda inferior da tela (margem externa)
-                .background(Color.DarkGray)    // 3. Pinta o fundo do texto de cinza
-                .padding(horizontal = 185.dp, vertical = 12.dp)
+        // --- 1. CONTEÚDO DO TOPO E MEIO ---
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Linha do Placar (SCORE na esquerda, LIVES na direita)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "SCORE: 0050",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace
+                )
+                Text(
+                    text = "LIVES: 🚀🚀🚀",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace
+                )
+            }
 
+            // Espaçamento e Linha de Inimigos/Vírus
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                GamesStatesPreviewContent()
+                GamesStatesPreviewContent()
+                GamesStatesPreviewContent()
+                GamesStatesPreviewContent()
+                GamesStatesPreviewContent()
+            }
+        }
 
-        )
-
-        // Chamada da imagem inserida aqui para renderizar na tela
-        Row() {
-            GamesStatesPreviewContent()
-            GamesStatesPreviewContent()
-            GamesStatesPreviewContent()
-            GamesStatesPreviewContent()
-
+        // --- 2. NAVE CENTRALIZADA ABAIXO DOS INIMIGOS ---
+        Box(
+            modifier = Modifier.align(Alignment.Center)
+        ) {
             NaveStatesPreviewContent()
         }
+
+        // --- 3. BOTÃO PRESS START NO RODAPÉ ---
+        Text(
+            text = "PRESS START",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            fontFamily = FontFamily.Monospace,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .align(Alignment.BottomCenter) // Fixa no rodapé
+                .padding(bottom = 16.dp)       // Margem do fundo da tela
+                .fillMaxWidth()               // Preenche a largura inteira
+                .background(Color(0xFF333333)) // Fundo cinza como na foto
+                .padding(vertical = 14.dp)     // Espessura do botão
+        )
     }
 }
 
@@ -103,10 +130,7 @@ fun GamesStatesPreviewContent(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.virus1),
         contentDescription = null,
-        modifier = modifier
-            .size(76.dp)
-            .offset(x = 50.dp, y = 24.dp)
-
+        modifier = modifier.size(48.dp) // Tamanho proporcional para caber 5 vírus na linha
     )
 }
 
@@ -115,9 +139,7 @@ fun NaveStatesPreviewContent(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.nave),
         contentDescription = null,
-        modifier = modifier
-//            .offset(x = 50.dp, y = 400.dp)
-            .size(900.dp)
+        modifier = modifier.size(64.dp)
     )
 }
 
@@ -125,14 +147,6 @@ fun NaveStatesPreviewContent(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GamesStatesPreview() {
-    KotlingameTheme {
-        GamesStates(name = "Android")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NaveStatesPreview() {
     KotlingameTheme {
         GamesStates(name = "Android")
     }
